@@ -15,7 +15,7 @@ class _ListeHopitauxScreenState extends State<ListeHopitauxScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Liste des Hopitaux"),
+        title: Text("Liste Hopitaux"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right:  10),
@@ -29,11 +29,11 @@ class _ListeHopitauxScreenState extends State<ListeHopitauxScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Rechercher...',
@@ -67,38 +67,39 @@ class _ListeHopitauxScreenState extends State<ListeHopitauxScreen> {
                   });
                 },
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 20,
-                itemBuilder: (context,index){
-                  return Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black),
-                    ),
-                    child: ListTile(
-                      onTap: (){
-                        Navigator.of(context).pushNamed("/voir_hopital");
-                      },
-                      title: Text("Hopital efoulan".toUpperCase(),style: TextStyle(fontWeight: FontWeight.w900),),
-                      subtitle: Text("dfdfdfdfdf"),
-                      trailing: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text("8"),
-                          Text("Medecin")
-                        ],
+              SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 20,
+                  itemBuilder: (context,index){
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black),
                       ),
-                    ),
-                  );
-                },
+                      child: ListTile(
+                        onTap: (){
+                          Navigator.of(context).pushNamed("/voir_hopital");
+                        },
+                        title: Text("Hopital efoulan".toUpperCase(),style: TextStyle(fontWeight: FontWeight.w900),),
+                        subtitle: Text("dfdfdfdfdf"),
+                        trailing: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("8"),
+                            Text("Medecin")
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

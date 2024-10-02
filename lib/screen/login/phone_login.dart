@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:handihelp/services/app_colors.dart';
+import 'package:handihelp/services/constants.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -12,11 +14,14 @@ class PhoneLogin extends StatefulWidget {
 
 class _PhoneLoginState extends State<PhoneLogin> {
   final _formkey = GlobalKey<FormState>();
-  late TextEditingController _phoneController;
+  late TextEditingController _phoneController,_passwordController;
   late FocusNode _phoneFocusNode;
+  PhoneNumber number = PhoneNumber(isoCode: 'CM');
+
   @override
   void initState() {
     _phoneController = new TextEditingController();
+    _passwordController = new TextEditingController();
     _phoneFocusNode = new FocusNode();
     super.initState();
   }
@@ -26,10 +31,12 @@ class _PhoneLoginState extends State<PhoneLogin> {
     // TODO: implement dispose
     _phoneFocusNode.dispose();
     _phoneController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -43,38 +50,86 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 SizedBox(height: 20,),
                 Form(
                   key: _formkey,
-                  child: TextFormField(
-                    controller: _phoneController,
-                    //autofocus: true,
-                    decoration: new InputDecoration(
-                      prefix: Text("+237 "),
-                      filled: true,
-                      fillColor: Colors.white,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                  child: Container(
+                    height: 80,
+                    child: InternationalPhoneNumberInput(
+                      onInputChanged: (PhoneNumber numb) {
+                        number = numb;
+                        print(number.phoneNumber);
+                      },
+                      onInputValidated: (bool value) {
+                        print(value);
+                      },
+                      validator: (val){
+
+                      },
+                      selectorConfig: SelectorConfig(
+                        selectorType: size.width >= desktopBreakPoint ? PhoneInputSelectorType.BOTTOM_SHEET : PhoneInputSelectorType.DIALOG,
+                        setSelectorButtonAsPrefixIcon: false,
+                        useBottomSheetSafeArea: false,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      ignoreBlank: true,
+                      autoValidateMode: AutovalidateMode.always,
+                      selectorTextStyle: TextStyle(color: Colors.black),
+                      initialValue: number,
+                      textFieldController: _phoneController,
+                      formatInput: false,
+                      keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                      inputBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.indigo, width: 2.0),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 3.0),
+                      inputDecoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 1.0),
+                        ),
+                        hintText: "phone",
                       ),
-                      hintText: 'Mobile Number',
+                      /*onSaved: (PhoneNumber number) {
+                          print('On Saved: $number');
+                        },*/
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    onTapOutside: (val){
-                      _phoneFocusNode.unfocus();
-                    },
-                    maxLines: 1,
-                    validator: (value){
-                      if(value!.length < 9) return "Incorrect Number";
-                    },
-                    autocorrect: true,
-                    // Only numbers can be entered
                   ),
+                ),
+                SizedBox(height: 20,),
+                TextFormField(
+                  controller: _passwordController,
+                  //autofocus: true,
+                  decoration: new InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.greenAccent, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 3.0),
+                    ),
+                    hintText: 'mot de pass',
+                  ),
+                  keyboardType: const TextInputType.numberWithOptions(),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  onTapOutside: (val){
+                    _phoneFocusNode.unfocus();
+                  },
+                  maxLines: 1,
+                  validator: (value){
+                    if(value!.length < 6) return "Incorrect Code";
+                  },
+                  autocorrect: true,
+                  // Only numbers can be entered
                 ),
                 SizedBox(height: 20,),
                 ElevatedButton(
@@ -89,7 +144,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
                     //minimumSize: Size(100, 40), //////// HERE
                   ),
                   onPressed: ()async{
-                    Navigator.of(context).pushNamed("/code_otp",arguments: _phoneController.text);
+                    //Navigator.of(context).pushNamed("/code_otp",arguments: number.phoneNumber);
+                    Navigator.of(context).pushNamed("/super_admin");
                   },
                   child: Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                 )

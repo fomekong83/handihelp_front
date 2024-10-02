@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:handihelp/model_Services/hopital_view_model.dart';
+import 'package:handihelp/services/constants.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 
 class AjouterHopital extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class AjouterHopital extends StatefulWidget {
 class _AjouterHopitalState extends State<AjouterHopital> {
   final _formKey = GlobalKey<FormState>();
   final _hospitalData = <String, dynamic>{};
+
+  PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
@@ -39,117 +45,196 @@ class _AjouterHopitalState extends State<AjouterHopital> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Ajouter Hospital'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _hospitalData['name'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Address'),
-                onSaved: (value) {
-                  _hospitalData['address'] = value;
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: 'City'),
-                      onSaved: (value) {
-                        _hospitalData['city'] = value;
-                      },
-                    ),
+    final size = MediaQuery.of(context).size;
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Text('Ajouter Hospital'),
+          ),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Nom',
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Entrez un nom svp';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _hospitalData['nom'] = value;
+                        },
+                      ),
+                      SizedBox(height: 20,),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Ville',
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                        ),
+                        onSaved: (value) {
+                          _hospitalData['ville'] = value;
+                        },
+                      ),
+                      Container(
+                        height: 80,
+                        child: InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber numb) {
+                            number = numb;
+                            print(number.phoneNumber);
+                          },
+                          onInputValidated: (bool value) {
+                            print(value);
+                          },
+                          validator: (val){
+
+                          },
+                          selectorConfig: SelectorConfig(
+                            selectorType: size.width >= desktopBreakPoint ? PhoneInputSelectorType.BOTTOM_SHEET : PhoneInputSelectorType.DIALOG,
+                            setSelectorButtonAsPrefixIcon: false,
+                            useBottomSheetSafeArea: false,
+                          ),
+                          ignoreBlank: true,
+                          autoValidateMode: AutovalidateMode.always,
+                          selectorTextStyle: TextStyle(color: Colors.black),
+                          initialValue: number,
+                          textFieldController: _phoneController,
+                          formatInput: false,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          inputBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                          ),
+                          inputDecoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 1.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 1.0),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 1.0),
+                            ),
+                            hintText: "Telephone",
+                          ),
+                          onSaved: (value) {
+                            _hospitalData['telephone'] = value.phoneNumber;
+                          },
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Email',
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onSaved: (value) {
+                          _hospitalData['email'] = value;
+                        },
+                      ),
+                      SizedBox(height: 20,),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'description',
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 1.0),
+                          ),
+                        ),
+                        keyboardType: TextInputType.url,
+                        maxLines: 5,
+                        onSaved: (value) {
+                          _hospitalData['description'] = value;
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: ()async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            // Save the hospital data
+                            // You can access the form data using _hospitalData
+                            print(_hospitalData);
+                            await context.read<HopitalViewModel>().registerHopital(context, _hospitalData);
+                          }
+                        },
+                        child: Text('Enregistrer'),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: 'State'),
-                      onSaved: (value) {
-                        _hospitalData['state'] = value;
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Zip Code'),
-                onSaved: (value) {
-                  _hospitalData['zipCode'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Country'),
-                onSaved: (value) {
-                  _hospitalData['country'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Phone'),
-                onSaved: (value) {
-                  _hospitalData['phone'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
-                onSaved: (value) {
-                  _hospitalData['email'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Website'),
-                keyboardType: TextInputType.url,
-                onSaved: (value) {
-                  _hospitalData['website'] = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Number of Beds'),
-                keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  _hospitalData['numBeds'] = int.tryParse(value ?? '');
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Specialties'),
-                maxLines: null,
-                onSaved: (value) {
-                  _hospitalData['specialties'] = value;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Save the hospital data
-                    // You can access the form data using _hospitalData
-                    print(_hospitalData);
-                  }
-                },
-                child: Text('Save'),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+        Consumer<HopitalViewModel>(builder: (context,hopitalViewModel,child){
+          return Visibility(
+            visible: hopitalViewModel.isregistring,
+            child: CircularProgressIndicator.adaptive(),
+          );
+        })
+      ],
     );
   }
 }

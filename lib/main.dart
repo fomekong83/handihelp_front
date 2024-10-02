@@ -8,6 +8,7 @@ import 'package:handihelp/screen/social_page.dart';
 import 'package:handihelp/screen/super_admin/ajouter_directeur.dart';
 import 'package:handihelp/screen/super_admin/ajouter_exercice.dart';
 import 'package:handihelp/screen/super_admin/ajouter_hopital.dart';
+import 'package:handihelp/screen/super_admin/liste_directeur_screen.dart';
 import 'package:handihelp/screen/super_admin/liste_examens_screen.dart';
 import 'package:handihelp/screen/super_admin/liste_exercice_screen.dart';
 import 'package:handihelp/screen/super_admin/liste_handicapes_screen.dart';
@@ -17,6 +18,7 @@ import 'package:handihelp/screen/super_admin/profil_hopital_screen.dart';
 import 'package:handihelp/services/sharedPreferences.dart';
 import 'package:provider/provider.dart';
 
+import 'model_Services/hopital_view_model.dart';
 import 'screen/welcome_page.dart';
 
 void main() {
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context)=>AppSharedPreferences()),
         ChangeNotifierProvider(create: (context)=>SuperAdminMenuProvider()),
+
+
+        ChangeNotifierProvider(create: (context)=>HopitalViewModel()),
       ],
       child: MaterialApp(
         initialRoute: '/',
@@ -46,6 +51,7 @@ class MyApp extends StatelessWidget {
 
           //SUPER ADMIN ROUTES
           '/liste_hopitaux': (context)=> ListeHopitauxScreen(),
+          '/liste_directeur': (context)=> ListeDirecteurScreen(),
           '/liste_Specialiter': (context)=> ListeSpecialitesScreen(),
           '/liste_examens': (context)=> ListeExamensScreen(),
           '/liste_handicapes': (context)=> ListeHandicapesScreen(),

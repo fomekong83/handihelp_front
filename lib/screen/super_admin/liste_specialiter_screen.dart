@@ -29,11 +29,11 @@ class _ListeSpecialitesScreenState extends State<ListeSpecialitesScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Rechercher...',
@@ -67,32 +67,33 @@ class _ListeSpecialitesScreenState extends State<ListeSpecialitesScreen> {
                   });
                 },
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 20,
-                itemBuilder: (context,index){
-                  return Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black),
-                    ),
-                    child: ListTile(
-                      onTap: (){
-                        //Navigator.of(context).pushNamed("/voir_hopital");
-                      },
-                      title: Text("Allergologue".toUpperCase(),style: TextStyle(fontWeight: FontWeight.w900),),
-                      subtitle: Text("dfdfdfdfdf"),
-                      trailing: Icon(Icons.update,color: Colors.blue,),
-                    ),
-                  );
-                },
+              SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 20,
+                  itemBuilder: (context,index){
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: ListTile(
+                        onTap: (){
+                          //Navigator.of(context).pushNamed("/voir_hopital");
+                        },
+                        title: Text("Allergologue".toUpperCase(),style: TextStyle(fontWeight: FontWeight.w900),),
+                        subtitle: Text("dfdfdfdfdf"),
+                        trailing: Icon(Icons.update,color: Colors.blue,),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -105,6 +106,8 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  final _specialiterData = <String, dynamic>{};
 
   return showDialog<void>(
     context: context,
@@ -120,7 +123,27 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Nom'),
+                  decoration: InputDecoration(
+                      labelText: 'Nom',
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                  ),
+                  onSaved: (value) {
+                    _specialiterData['nom'] = value;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Entrez un nom svp';
@@ -128,9 +151,30 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
                     return null;
                   },
                 ),
+                SizedBox(height: 20,),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                      labelText: 'Description',
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                  ),
+                  onSaved: (value) {
+                    _specialiterData['description'] = value;
+                  },
                   maxLines: 3,
                 ),
               ],
@@ -148,10 +192,12 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
             child: Text('Enregistrer'),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
                 // Save the specialty data
                 // You can access the form field values using the controllers
                 // For example: _nameController.text
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                print(_specialiterData);
               }
             },
           ),

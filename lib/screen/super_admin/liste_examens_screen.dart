@@ -15,7 +15,7 @@ class _ListeExamensScreenState extends State<ListeExamensScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Les des examens"),
+        title: Text("Les examens"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right:  10),
@@ -29,11 +29,11 @@ class _ListeExamensScreenState extends State<ListeExamensScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Rechercher...',
@@ -67,40 +67,51 @@ class _ListeExamensScreenState extends State<ListeExamensScreen> {
                   });
                 },
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 20,
-                itemBuilder: (context,index){
-                  return Container(
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black),
-                    ),
-                    child: Column(
-                      children: [
-                        Text("Radiologie".toUpperCase(),style: TextStyle(fontWeight: FontWeight.w900),),
-                        Text("sfsfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdf",style: TextStyle(),),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                              onPressed: (){
-
-                              },
-                              child: Text("Edite")
+              SizedBox(height: 10,),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 20,
+                  itemBuilder: (context,index){
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 10.0),
+                      padding: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                  color: Colors.primaries[index % Colors.primaries.length]
+                              ),
+                              child: Text("Radiologie".toUpperCase(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.w900,fontSize: 10),)
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                },
+                          SizedBox(height: 10,),
+                          Text("sfsfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdf",style: TextStyle(),),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
+                                onPressed: (){
+
+                                },
+                                child: Text("Edite")
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -112,12 +123,14 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  final _examenData = <String, dynamic>{};
+
   return showDialog<void>(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Ajouter Examen',textAlign: TextAlign.center,),
+        title: Text('Add Examen',textAlign: TextAlign.center,),
         content: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -126,17 +139,58 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Nom'),
+                  decoration: InputDecoration(
+                    labelText: 'Nom',
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                  ),
+                  onSaved: (value) {
+                    _examenData['nom'] = value;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Entre un nom svp';
+                      return 'Entrez un nom svp';
                     }
                     return null;
                   },
                 ),
+                SizedBox(height: 20,),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.indigo, width: 1.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 1.0),
+                    ),
+                  ),
+                  onSaved: (value) {
+                    _examenData['description'] = value;
+                  },
                   maxLines: 3,
                 ),
               ],
@@ -154,10 +208,12 @@ Future<void> showAddSpecialtyDialog(BuildContext context) async {
             child: Text('Enregistrer'),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
                 // Save the specialty data
                 // You can access the form field values using the controllers
                 // For example: _nameController.text
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                print(_examenData);
               }
             },
           ),

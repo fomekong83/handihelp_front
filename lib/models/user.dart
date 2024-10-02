@@ -7,7 +7,6 @@ class User {
 	bool status = true;
 	String? verified_at;
 
-
   User({
     required this.id_user,
     this.id_centre,
@@ -16,7 +15,6 @@ class User {
 		required this.status,
 		required this.verified_at,
   });
-
 
 	factory User.fromJson(Map<String, dynamic> json) {
 		return User(
@@ -29,8 +27,6 @@ class User {
 			//centres: json['centres'] == null ? [] : List<Centre>.from(json['centres'].map((e) => Centre.fromJson(e))).toList(),
 		);
 	}
-
-
 
 	Map<String, dynamic> toJson() {
   return {

@@ -14,12 +14,7 @@ class CallApi{
   late String token;
   AppSharedPreferences appSharedPreferences = AppSharedPreferences();
 
-  static final String url = "http://192.168.8.101:8080/api/";
-  //static final String frontEndUrl = "https://www.freenkam.com/";
-  //static final String url = "https://www.api.freenkam.com/api/";
-  //static final String imageurl = "https://freenkam-images.s3.eu-north-1.amazonaws.com/";
-  //static final String imageurl = "https://freenkam-s3-bucket.s3.amazonaws.com/";
-  //static final String imageurl = "http://192.168.8.101:8080/";
+  static final String url = "http://127.0.0.1:8080/api/";
 
 
   Future<http.Response> authPostData(data,apiUrl) async {

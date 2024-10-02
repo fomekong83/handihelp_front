@@ -8,6 +8,7 @@ import 'package:handihelp/services/app_colors.dart';
 import 'package:handihelp/services/sharedPreferences.dart';
 import 'package:provider/provider.dart';
 
+import '../lecteur_video360_screen.dart';
 import '../super_admin/ajouter_directeur.dart';
 
 class DashboardSuperAdmin extends StatefulWidget {
@@ -236,6 +237,34 @@ class _DashboardSuperAdminState extends State<DashboardSuperAdmin> {
           ),
           InkWell(
             onTap: (){
+              Navigator.of(context).pushNamed("/liste_directeur");
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              width: 100,
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(FontAwesomeIcons.a, color: Colors.orange),
+                  SizedBox(height: 4.0),
+                  Text(
+                    "Directeur",
+                    style: GoogleFonts.poppins(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: (){
               Navigator.of(context).pushNamed("/liste_Specialiter");
             },
             child: Container(
@@ -359,14 +388,20 @@ class _DashboardSuperAdminState extends State<DashboardSuperAdmin> {
           )
         ],
       ),
+      /*Container(
+        height: 180,
+        width: 200,
+        //child: Video360Player(videoUrl: 'https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8',),
+        child: Video360Player(videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',),
+      )*/
+
     ],
   );
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
+
     return Consumer<SuperAdminMenuProvider>(
       builder: (context,superAdminMenuProvider,child){
         return Scaffold(

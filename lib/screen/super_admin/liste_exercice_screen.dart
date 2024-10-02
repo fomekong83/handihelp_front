@@ -37,11 +37,11 @@ class _ListeExercicesScreenState extends State<ListeExercicesScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Rechercher...',
@@ -75,29 +75,52 @@ class _ListeExercicesScreenState extends State<ListeExercicesScreen> {
                   });
                 },
               ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _calculateCrossAxisCount(context),
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+              SizedBox(height: 10,),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _calculateCrossAxisCount(context),
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                  ),
+                  itemCount: 100, // Replace with your actual item count
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: (){
+                        showDialog(
+                            context: context,
+                            builder: (context){
+                              return AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      height: 200,
+                                      color: Colors.black,
+                                    ),
+                                    Text("Name"),
+                                    Text("Category"),
+                                  ],
+                                ),
+                              );
+                            }
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Center(
+                          child: Text('Item $index'),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                itemCount: 100, // Replace with your actual item count
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text('Item $index'),
-                    ),
-                  );
-                },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
